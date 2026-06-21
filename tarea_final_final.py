@@ -115,17 +115,18 @@ def registrar_prestamo(lista):
     print("El prestamo fue registrado correctamente")
 
 def buscar_prestamo(valor,prestamos):
-    for posicion,prestamo in enumerate(prestamos,1):
+    for posicion,prestamo in enumerate(prestamos):
         if prestamo["codigo_prestamo"] == valor:
             return posicion
     return -1
 
 def eliminar_prestamo(valor,prestamos):
-    for prestamo in prestamos:
-        if prestamo["codigo_prestamo"] == valor:
-            prestamos.remove(prestamo)
-            return True, "Préstamo eliminado correctamente"
-    return False, "Error: el prestamo no existe o ya fue eliminado"
+    posicion = buscar_prestamo(valor,prestamos)
+    if posicion == -1:
+        return False, "Error: el prestamo no existe o ya fue eliminado"
+    else:
+        prestamos.pop(posicion)
+        return True, "Préstamo eliminado correctamente"
 
 def actualizar_seguimiento(prestamos):
     for prestamo in prestamos:
@@ -152,38 +153,47 @@ while True:
     opcion = validar_opcion()
     
     if opcion == 1:
+        os.system("cls")
+        print("*** REGISTRAR PRESTAMO ***")
         registrar_prestamo(prestamos)
-        
+
     elif opcion == 2:
+        os.system("cls")
         if len(prestamos) == 0:
             print("Aún no hay prestamos registrados")
         else:
+            print("*** BUSCAR PRESTAMO ***")
             codigo_prestamo = input("ingrese código a buscar: ").title()
             posicion = buscar_prestamo(codigo_prestamo,prestamos)
             if posicion == -1:
-                print("El préstamo no existe")
+                print("El préstamo no existe o fue eliminado")
             else:
-                print("La posición del prestamo es: N°",posicion)
-    
+                print("La posición del prestamo es: N°",posicion+1)
+
     elif opcion == 3:
+        os.system("cls")
         if len(prestamos) == 0:
             print("Aún no hay prestamos registrados")
         else:
+            print("*** ELIMINAR PRESTAMO ***")
             codigo_prestamo = input("ingrese código a eliminar: ").title()
             validar,mensajito = eliminar_prestamo(codigo_prestamo,prestamos)
             print(mensajito)
-    
+
     elif opcion == 4:
+        os.system("cls")
         if len(prestamos) == 0:
             print("Aún no hay prestamos registrados")
         else:
             actualizar_seguimiento(prestamos)
             print("Se han actualizado todos los prestamos")
-    
+
     elif opcion == 5:
+        os.system("cls")
         if len(prestamos) == 0:
             print("Aún no hay prestamos registrados")
         else:
+            print("***      PRESTAMOS REGISTRADOS      ***")
             mostrar_prestamos(prestamos)
             print("\n. . . Presione una tecla para volver al menú principal . . .")
             msvcrt.getch()
